@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "723969996728",
+    "project_id": "example-keyri-auth",
+    "storage_bucket": "example-keyri-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723969996728:android:083ef654b3c2562dac014d",
+        "android_client_info": {
+          "package_name": "com.keyri.examplefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723969996728-g878oodpfql19hjida6r09afvhqoc90c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.keyri.examplefirebase",
+            "certificate_hash": "436a30d8573d11ecc708145468ad7092855095cb"
+          }
+        },
+        {
+          "client_id": "723969996728-589bhet52rv2tsvasc4oeuj65gv0qbmi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRQZGy1X9gaZlYck12OdZF0ztpcrzw20o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723969996728-589bhet52rv2tsvasc4oeuj65gv0qbmi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

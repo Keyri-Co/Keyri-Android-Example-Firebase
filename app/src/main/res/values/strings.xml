@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Keyri Android Example Firebase</string>
+    <string name="firebase_example_title">Firebase Example</string>
+    <string name="firebase_auth">Authenticate with Firebase</string>
+</resources>
