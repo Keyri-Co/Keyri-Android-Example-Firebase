@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity() {
 
                             val tokenData = JSONObject().apply {
                                 put("token", tokenResult.token)
+
+                                authResult.user?.zzf()?.let {
+                                    put("tokenData", JSONObject(it))
+                                }
+
                                 put("claims", claims)
                                 put("authTimestamp", tokenResult.authTimestamp)
                                 put("issuedAtTimestamp", tokenResult.issuedAtTimestamp)
