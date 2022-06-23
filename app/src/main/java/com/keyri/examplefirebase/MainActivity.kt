@@ -1,10 +1,14 @@
 package com.keyri.examplefirebase
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.auth.OAuthProvider
@@ -158,6 +162,14 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
             }
+            .addOnFailureListener {
+                showMessage(it.message)
+
+                it.message?.let { errorMessage ->
+                    copyMessageToClipboard(errorMessage)
+                    Log.e("Keyri Firebase example", errorMessage)
+                }
+            }
     }
 
     private fun keyriAuth(publicUserId: String?, payload: String) {
@@ -168,5 +180,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         easyKeyriAuthLauncher.launch(intent)
+    }
+
+    private fun showMessage(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun copyMessageToClipboard(message: String) {
+        val clipboard: ClipboardManager =
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        val clip = ClipData.newPlainText("Keyri Firebase example", message)
+
+        clipboard.setPrimaryClip(clip)
     }
 }

@@ -45,7 +45,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Keyri
-    implementation 'com.github.Keyri-Co:keyri-android-whitelabel-sdk:0.9.0'
+    implementation 'com.github.Keyri-Co:keyri-android-whitelabel-sdk:0.9.6'
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
