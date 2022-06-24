@@ -143,9 +143,9 @@ class MainActivity : AppCompatActivity() {
                             val keyri = Keyri()
 
                             val signingData = JSONObject().apply {
-                                put("timestamp", System.currentTimeMillis()) // Optional
-                                put("email", authResult.user?.email) // Optional
-                                put("uid", authResult.user?.uid) // Optional
+                                put("timestamp", System.currentTimeMillis())
+                                put("email", authResult.user?.email)
+                                put("uid", authResult.user?.uid)
                             }.toString()
 
                             val signature = keyri.getUserSignature(email, signingData)
