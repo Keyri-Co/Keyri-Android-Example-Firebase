@@ -16,7 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.keyri.examplefirebase.databinding.ActivityMainBinding
 import com.keyrico.keyrisdk.Keyri
-import com.keyrico.keyrisdk.ui.auth.AuthWithScannerActivity
+import com.keyrico.scanner.AuthWithScannerActivity
 import org.json.JSONArray
 import org.json.JSONObject
 
