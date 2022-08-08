@@ -3,7 +3,6 @@ package com.keyri.examplefirebase
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -15,8 +14,7 @@ import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.keyri.examplefirebase.databinding.ActivityMainBinding
-import com.keyrico.keyrisdk.Keyri
-import com.keyrico.scanner.AuthWithScannerActivity
+import com.keyrico.scanner.easyKeyriAuth
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -54,36 +52,6 @@ class MainActivity : AppCompatActivity() {
                 Firebase.auth.getAccessToken(false)
                     .addOnSuccessListener { result ->
                         (result as? GetTokenResult)?.let { tokenResult ->
-                            val claims = JSONObject().apply {
-                                tokenResult.claims.entries.forEach {
-                                    put(it.key, it.value)
-                                }
-                            }
-
-                            val tokenData = JSONObject().apply {
-                                put("token", tokenResult.token)
-
-                                authResult.user?.zzf()?.let {
-                                    put("tokenData", JSONObject(it))
-                                }
-
-                                put("claims", claims)
-                                put("authTimestamp", tokenResult.authTimestamp)
-                                put("issuedAtTimestamp", tokenResult.issuedAtTimestamp)
-                                put("expirationTimestamp", tokenResult.expirationTimestamp)
-                                put("signInProvider", tokenResult.signInProvider)
-                                put("signInSecondFactor", tokenResult.signInSecondFactor)
-                            }
-
-                            val metadata = JSONObject().apply {
-                                val creationTimestamp = authResult.user?.metadata?.creationTimestamp
-                                val lastSignInTimestamp =
-                                    authResult.user?.metadata?.lastSignInTimestamp
-
-                                put("creationTimestamp", creationTimestamp)
-                                put("lastSignInTimestamp", lastSignInTimestamp)
-                            }
-
                             val providerData = JSONArray()
 
                             authResult.user?.providerData?.forEach {
@@ -100,64 +68,30 @@ class MainActivity : AppCompatActivity() {
                                 providerData.put(userInfo)
                             }
 
-                            val user = JSONObject().apply {
-                                put("email", authResult.user?.email)
-                                put("token", tokenData)
-                                put("isAnonymous", authResult.user?.isAnonymous)
-                                put("metadata", metadata)
-                                put("providerData", providerData)
-                                put("tenantId", authResult.user?.tenantId)
-                                put("displayName", authResult.user?.displayName)
-                                put("isEmailVerified", authResult.user?.isEmailVerified)
-                                put("phoneNumber", authResult.user?.phoneNumber)
-                                put("photoUrl", authResult.user?.photoUrl)
-                                put("providerId", authResult.user?.providerId)
-                                put("uid", authResult.user?.uid)
-                            }
+                            var refreshToken = ""
+                            var accessToken = ""
 
-                            val profile = JSONObject().apply {
-                                authResult.additionalUserInfo?.profile?.entries?.forEach {
-                                    put(it.key, it.value)
-                                }
-                            }
+                            authResult.user?.zzf()?.let {
+                                val jsonObject = JSONObject(it)
 
-                            val additionalUserInfo = JSONObject().apply {
-                                put("username", authResult.additionalUserInfo?.username)
-                                put("profile", profile)
-                                put("providerId", authResult.additionalUserInfo?.providerId)
-                                put("isNewUser", authResult.additionalUserInfo?.isNewUser)
-                            }
-
-                            val credential = JSONObject().apply {
-                                put("provider", authResult.credential?.provider)
-                                put("signInMethod", authResult.credential?.signInMethod)
-                            }
-
-                            val data = JSONObject().apply {
-                                put("user", user)
-                                put("additionalUserInfo", additionalUserInfo)
-                                put("credential", credential)
+                                refreshToken = jsonObject.getString("refresh_token")
+                                accessToken = jsonObject.getString("access_token")
                             }
 
                             val email = authResult.user?.email
-                            val keyri = Keyri()
-
-                            val signingData = JSONObject().apply {
-                                put("timestamp", System.currentTimeMillis())
-                                put("email", authResult.user?.email)
-                                put("uid", authResult.user?.uid)
-                            }.toString()
-
-                            val signature = keyri.getUserSignature(email, signingData)
 
                             val payload = JSONObject().apply {
-                                put("data", data)
-                                put("signingData", signingData)
-                                put("userSignature", signature) // Optional
-                                put("associationKey", keyri.getAssociationKey(email)) // Optional
+                                put("uid", authResult.user?.uid)
+                                put("emailVerified", authResult.user?.isEmailVerified)
+                                put("isAnonymous", authResult.user?.isAnonymous)
+                                put("providerData", providerData)
+                                put("refreshToken", refreshToken)
+                                put("accessToken", accessToken)
+                                put("expirationTime", tokenResult.expirationTimestamp)
                             }.toString()
 
-                            // Public user ID (email) is optional
+                            Log.e("payload", payload)
+
                             keyriAuth(email, payload)
                         }
                     }
@@ -173,13 +107,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun keyriAuth(publicUserId: String?, payload: String) {
-        val intent = Intent(this, AuthWithScannerActivity::class.java).apply {
-            putExtra(AuthWithScannerActivity.APP_KEY, "SQzJ5JLT4sEE1zWk1EJE1ZGNfwpvnaMP")
-            putExtra(AuthWithScannerActivity.PUBLIC_USER_ID, publicUserId)
-            putExtra(AuthWithScannerActivity.PAYLOAD, payload)
-        }
-
-        easyKeyriAuthLauncher.launch(intent)
+        easyKeyriAuth(
+            content = this,
+            easyKeyriAuthLauncher = easyKeyriAuthLauncher,
+            appKey = "SQzJ5JLT4sEE1zWk1EJE1ZGNfwpvnaMP",
+            payload = payload,
+            publicUserId = publicUserId
+        )
     }
 
     private fun showMessage(message: String?) {
