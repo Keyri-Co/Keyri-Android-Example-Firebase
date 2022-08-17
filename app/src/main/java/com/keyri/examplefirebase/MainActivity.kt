@@ -106,13 +106,13 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun keyriAuth(username: String?, payload: String) {
+    private fun keyriAuth(publicUserId: String?, payload: String) {
         easyKeyriAuth(
             content = this,
             easyKeyriAuthLauncher = easyKeyriAuthLauncher,
             appKey = "SQzJ5JLT4sEE1zWk1EJE1ZGNfwpvnaMP",
             payload = payload,
-            username = username
+            publicUserId = publicUserId
         )
     }
 
