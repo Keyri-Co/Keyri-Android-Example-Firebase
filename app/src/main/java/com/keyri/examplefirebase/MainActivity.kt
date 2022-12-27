@@ -107,13 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun keyriAuth(publicUserId: String?, payload: String) {
-        easyKeyriAuth(
-            content = this,
-            easyKeyriAuthLauncher = easyKeyriAuthLauncher,
-            appKey = "SQzJ5JLT4sEE1zWk1EJE1ZGNfwpvnaMP",
-            payload = payload,
-            publicUserId = publicUserId
-        )
+        easyKeyriAuth(this, easyKeyriAuthLauncher, APP_KEY, payload, publicUserId)
     }
 
     private fun showMessage(message: String?) {
@@ -127,5 +121,9 @@ class MainActivity : AppCompatActivity() {
         val clip = ClipData.newPlainText("Keyri Firebase example", message)
 
         clipboard.setPrimaryClip(clip)
+    }
+
+    companion object {
+        private const val APP_KEY = "SQzJ5JLT4sEE1zWk1EJE1ZGNfwpvnaMP"
     }
 }
